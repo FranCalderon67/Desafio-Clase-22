@@ -1,0 +1,68 @@
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    {{! Bootstrap CDN }}
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
+    <title>Stickers</title>
+
+  </head>
+
+  <style>
+
+    .product-flex--container { display: flex; flex-direction: row; flex-wrap: wrap; align-content: center; justify-content: space-evenly; margin: 1rem 0 1rem 0; } .card{ margin-top: 1rem;
+    margin-bottom: 1rem; } .form-flex-container{ display: flex; flex-direction: column; } .form-flex-container input { width: 300px; caret-color: red; margin: 0.5rem 0 1rem 1rem; }
+    .form-flex-container label { margin-left: 1rem; } .form-flex-container button{ width: 250px; margin-left: 1rem; background-color: yellowgreen; font-size: 18px; } .chat-container{ margin-left:
+    1rem; } #messages{ margin-left: 1rem; margin-top: 0.5rem; } .autor{ color: blue; font-weight: bold; } .hora{ color: brown; } .mensaje{ color: green; font-style: italic; }
+
+  </style>
+
+  <body>
+
+    <section>
+      <h1>Agregar productos</h1>
+      <div>
+        <form class="form-flex-container" action="/productos" method="POST">
+          <label for="name">Nombre</label>
+          <input id="nombreProducto" type="text" name="name" />
+          <label for="image">Imagen</label>
+          <input id="imagenProducto" type="text" name="image" />
+          <label for="price">Precio</label>
+          <input id="precioProducto" type="number" name="price" />
+          <button type="submit" onclick="return enviarProducto()"> Cargar Producto</button>
+        </form>
+      </div>
+    </section>
+    <section>
+
+    </section>
+    <section>
+      <h1>Todos los productos</h1>
+      <div id="productos" class="product-flex--container"></div>
+
+    </section>
+
+    <section>
+      <h1>Centro de Mensajes</h1>
+
+      <form class="chat-container" onsubmit="return enviarMensaje()">
+        <input placeholder="Usuario" type="email" id="autor" required />
+        <div id="messages"></div>
+        <input placeholder="Mensaje" type="text" id="text" required />
+        <input type="submit" value="Enviar mensaje" />
+      </form>
+
+    </section>
+  </body>
+
+</html>
