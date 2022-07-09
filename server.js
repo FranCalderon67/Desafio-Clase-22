@@ -1,16 +1,16 @@
 const express = require("express");
-const { Server: IOServer } = require("socket.io");
+// const { Server: IOServer } = require("socket.io");
 const { Server: HttpServer } = require("http");
 const { engine } = require("express-handlebars");
 const chat = require("./daos/chat.js");
 const producto = require("./daos/producto.js");
 const crearProductoRandom = require("./utils/productosRandom.js");
-
+const chatNormalizado = require("./websockets/mensajes.js");
 //Conecto MongoDB
 producto.conectarMongo();
 const app = express();
 const httpServer = new HttpServer(app);
-const ioServer = new IOServer(httpServer);
+// const ioServer = new IOServer(httpServer);
 const { Server: SocketServer } = require("socket.io");
 const socketServer = new SocketServer(httpServer);
 
@@ -52,7 +52,8 @@ app.get("/api/productos-test", (req, res) => {
 });
 
 socketServer.on("connection", async (socket) => {
-  socket.emit("messages", await chat.obtenerTodos());
+  chatNormalizado(socket, SocketServer.sockets);
+  // socket.emit("messages", await chat.obtenerTodos());
   socket.emit("products", await producto.obtenerTodos());
 
   socket.on("new_message", async (mensaje) => {

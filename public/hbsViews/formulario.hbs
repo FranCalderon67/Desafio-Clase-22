@@ -12,7 +12,7 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="/socket.io/socket.io.js"></script>
-    <script src="../main.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
     <title>Stickers</title>
 
@@ -53,16 +53,24 @@
     </section>
 
     <section>
-      <h1>Centro de Mensajes</h1>
+      <h1>Centro de Mensajes Compresión: <span id="compresion-info"></span>%</h1>
 
-      <form class="chat-container" onsubmit="return enviarMensaje()">
-        <input placeholder="Usuario" type="email" id="autor" required />
-        <div id="messages"></div>
+      <input type="email" id="username" placeholder="Ingresá tu email" />
+      <input type="text" id="firstname" placeholder="Ingresá tu nombre" />
+      <input type="text" id="lastname" placeholder="Ingresá tu apellido" />
+      <input type="text" id="age" placeholder="Ingresá tu edad" />
+      <input type="text" id="alias" placeholder="Ingresá tu alias" />
+      <input type="text" id="avatar" placeholder="Ingresá tu avatar (url)" />
+
+      <div id="messages"></div>
+      <form id="formularioMensaje" class="chat-container">
         <input placeholder="Mensaje" type="text" id="text" required />
-        <input type="submit" value="Enviar mensaje" />
+        <input id="btnEnviar" type="submit" />
       </form>
 
     </section>
+
+    <script src="../main.js"></script>
   </body>
 
 </html>
