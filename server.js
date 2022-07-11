@@ -1,19 +1,28 @@
+//Imports de express
 const express = require("express");
-// const { Server: IOServer } = require("socket.io");
-const { Server: HttpServer } = require("http");
-const { engine } = require("express-handlebars");
-const chat = require("./daos/chat.js");
-const producto = require("./daos/producto.js");
-const crearProductoRandom = require("./utils/productosRandom.js");
-const chatNormalizado = require("./websockets/mensajes.js");
-//Conecto MongoDB
-producto.conectarMongo();
 const app = express();
+const { engine } = require("express-handlebars");
+const session = require("express-session");
+
+//Importes de Mongo
+const MongoStore = require("connect-mongo");
+const MongoUri = require("./src/utils/config.js");
+
+//Imports de Socket y Server
+const { Server: HttpServer } = require("http");
 const httpServer = new HttpServer(app);
-// const ioServer = new IOServer(httpServer);
 const { Server: SocketServer } = require("socket.io");
 const socketServer = new SocketServer(httpServer);
 
+//Imports de Funcionalidad
+
+const crearProductoRandom = require("./src/utils/productosRandom.js");
+const chatNormalizado = require("./src/websockets/mensajes.js");
+const productosSocket = require("./src/websockets/productos.js");
+const routerAuthWeb = require("./src/web/logAuth.js");
+const routerHomeWeb = require("./src/web/home.js");
+
+//Configuracion de servidor
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -29,45 +38,31 @@ app.engine(
   })
 );
 
-app.get("/", async (req, res) => {
-  let productos = await producto.obtenerTodos();
-  console.log(productos);
-  res.render("formulario", { productos });
-});
+app.use(
+  session({
+    store: MongoStore.create({ mongoUrl: MongoUri }),
+    secret: "coderhouse",
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+      maxAge: 60000,
+    },
+  })
+);
 
-app.post("/productos", async (req, res) => {
-  let prod = req.body;
-  if (prod.name === "" || prod.price === "" || prod.image === "") {
-    res.status(400).send({ error: "El producto no se pudo cargar, hay campos vacios" });
-  } else {
-    await producto.agregarItem(req.body);
-    res.redirect("/");
-  }
-});
+app.use(routerHomeWeb);
+app.use(routerAuthWeb);
 
 //Faker
 app.get("/api/productos-test", (req, res) => {
   const productos = crearProductoRandom();
   res.send(productos);
 });
-
+//Coneccion de Sockets
 socketServer.on("connection", async (socket) => {
-  chatNormalizado(socket, SocketServer.sockets);
-  // socket.emit("messages", await chat.obtenerTodos());
-  socket.emit("products", await producto.obtenerTodos());
-
-  socket.on("new_message", async (mensaje) => {
-    console.log(mensaje);
-    chat.agregarItem(mensaje);
-    let mensajes = await chat.obtenerTodos();
-    socketServer.sockets.emit("messages", mensajes);
-  });
-
-  socket.on("new_products", async (product) => {
-    await producto.agregarItem(product);
-    let productos = (await producto.obtenerTodos()) === "" ? "" : await producto.obtenerTodos();
-    socketServer.sockets.emit("products", productos);
-  });
+  chatNormalizado(socket, socketServer.sockets);
+  productosSocket(socket, socketServer.sockets);
 });
 
 httpServer.listen(8080, () => {

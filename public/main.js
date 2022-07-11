@@ -1,57 +1,7 @@
 const socket = io();
 
-// const usuario = document.getElementById("user").value;
-
-// const texto = document.getElementById("text").value;
-// const formMensaje = document.getElementById("formularioMensaje");
-
-// const enviarMensaje = () => {
-//   const nombre = document.getElementById("name").value;
-//   const apellido = document.getElementById("lastName").value;
-//   const edad = document.getElementById("age").value;
-//   const alias = document.getElementById("alias");
-//   const avatar = document.getElementById("avatar").value;
-
-//   const mensaje = {
-//     autor: {
-//       email: usuario,
-//       nombre: nombre,
-//       apellido: apellido,
-//       edad: edad,
-//       alias: alias,
-//       avatar: avatar,
-//     },
-//     texto: texto,
-//   };
-//   formMensaje.reset();
-//   socket.emit("new_message", mensaje);
-//   // Si no hacemos return false el formulario va a querer hacer un post a '/' y no queremos que lo haga
-//   return false;
-// };
-
-// const crearEtiquetasMensaje = (mensaje) => {
-//   const { usuario, texto, hora } = mensaje;
-//   return `
-//     <div>
-//     <p style='color:brown'>${hora}</p>
-//         <strong style='color:blue'><span>${usuario}:</span></strong>
-//         <i style='color:green'>${texto}</i>
-//     </div>
-//     `;
-// };
-
-// const agregarMensajes = (mensajes) => {
-//   if (mensajes !== "") {
-//     const mensajesFinal = mensajes.map((mensaje) => crearEtiquetasMensaje(mensaje)).join(" ");
-//     document.getElementById("messages").innerHTML = mensajesFinal;
-//   }
-// };
-
-// socket.on("messages", (messages) => agregarMensajes(messages));
-
 // MENSAJES
 
-/* --------------------- DESNORMALIZACIÓN DE MENSAJES ---------------------------- */
 // Definimos un esquema de autor
 const schemaAuthor = new normalizr.schema.Entity("author", {}, { idAttribute: "id" });
 
@@ -61,6 +11,10 @@ const schemaMensaje = new normalizr.schema.Entity("post", { author: schemaAuthor
 // Definimos un esquema de posts
 const schemaMensajes = new normalizr.schema.Entity("posts", { mensajes: [schemaMensaje] }, { idAttribute: "id" });
 /* ----------------------------------------------------------------------------- */
+
+const usuarioConectado = document.getElementById("nombreIngreso");
+console.log(usuarioConectado);
+// const saludoIngreso = (document.getElementById("bienvendido").textContent = `Bienvenido ${usuarioConectado}`);
 
 const inputUsername = document.getElementById("username");
 const inputMensaje = document.getElementById("text");
@@ -170,3 +124,5 @@ const agregarProducto = (producto) => {
 };
 
 socket.on("products", (products) => agregarProducto(products));
+
+//Datos usuario ingreso
