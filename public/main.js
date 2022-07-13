@@ -12,10 +12,6 @@ const schemaMensaje = new normalizr.schema.Entity("post", { author: schemaAuthor
 const schemaMensajes = new normalizr.schema.Entity("posts", { mensajes: [schemaMensaje] }, { idAttribute: "id" });
 /* ----------------------------------------------------------------------------- */
 
-const usuarioConectado = document.getElementById("nombreIngreso");
-console.log(usuarioConectado);
-// const saludoIngreso = (document.getElementById("bienvendido").textContent = `Bienvenido ${usuarioConectado}`);
-
 const inputUsername = document.getElementById("username");
 const inputMensaje = document.getElementById("text");
 const btnEnviar = document.getElementById("btnEnviar");
@@ -126,3 +122,21 @@ const agregarProducto = (producto) => {
 socket.on("products", (products) => agregarProducto(products));
 
 //Datos usuario ingreso
+
+const saludoBienvenida = document.getElementById("bienvenido");
+const btnCerrar = document.getElementById("btnCerrarSesion");
+const saludoDespedida = document.getElementById("despedida");
+
+fetch("/user")
+  .then((res) => res.text())
+  .then((user) => (saludoBienvenida.innerHTML = `Bienvenido/a ${user}`));
+
+btnCerrar.addEventListener("click", async () => {
+  const response = await fetch("/logout");
+  const nombre = await response.text();
+
+  saludoDespedida.textContent = `Hasta luego ${nombre}`;
+  setTimeout(() => {
+    location.href = "/";
+  }, 2000);
+});

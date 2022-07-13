@@ -37,7 +37,7 @@ app.engine(
     defaultLayout: "index.hbs",
   })
 );
-
+//Guardo en MONGO los datos y cookie de sesion
 app.use(
   session({
     store: MongoStore.create({ mongoUrl: MongoUri }),

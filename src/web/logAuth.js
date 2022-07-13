@@ -26,7 +26,7 @@ logAuthRouter.get("/logout", (req, res) => {
   if (nombre) {
     req.session.destroy((err) => {
       if (!err) {
-        res.render(path.join(process.cwd(), "./public/hbsViews/logout.hbs"), { nombre: req.session.nombre });
+        res.render(path.join(process.cwd(), "./public/hbsViews/logout.hbs"), { nombre: nombre });
       } else {
         res.redirect("/");
       }
@@ -34,6 +34,11 @@ logAuthRouter.get("/logout", (req, res) => {
   } else {
     res.redirect("/");
   }
+});
+
+logAuthRouter.get("/user", (req, res) => {
+  if (req.session?.nombre) res.send(req.session.nombre);
+  else res.send("invitado");
 });
 
 module.exports = logAuthRouter;
