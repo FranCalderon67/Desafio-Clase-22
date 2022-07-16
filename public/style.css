@@ -1,0 +1,103 @@
+.product-flex--container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: space-evenly;
+  margin: 1rem 0 1rem 0;
+}
+.card {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.form-flex-container {
+  display: flex;
+  flex-direction: column;
+}
+.form-flex-container input {
+  width: 300px;
+  caret-color: red;
+  margin: 0.5rem 0 1rem 1rem;
+}
+.form-flex-container label {
+  margin-left: 1rem;
+}
+.form-flex-container button {
+  width: 250px;
+  margin-left: 1rem;
+  background-color: yellowgreen;
+  font-size: 18px;
+}
+.chat-container {
+  margin-left: 1rem;
+}
+#messages {
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+}
+.autor {
+  color: blue;
+  font-weight: bold;
+}
+.hora {
+  color: brown;
+}
+.mensaje {
+  color: green;
+  font-style: italic;
+}
+
+.avatar {
+  height: 50px;
+  width: 75px;
+}
+
+.login-background {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(188deg, rgba(2, 0, 36, 1) 0%, rgba(231, 94, 184, 1) 56%, rgba(0, 212, 255, 1) 100%);
+}
+
+.login-form-background {
+  background-color: white;
+  border-radius: 10px;
+}
+
+.login-form-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
+  margin-left: 30%;
+}
+
+.login-form-flex-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+#nombreIngreso,
+#passwordIngreso,
+#mailRegistro,
+#passwordRegistro {
+  margin-bottom: 1rem;
+  width: 200px;
+  height: 40px;
+  background-color: rgb(219, 219, 219);
+  border: unset;
+}
+
+.btn-login {
+  background-color: rgb(156, 5, 149);
+  color: white;
+  width: 200px;
+  height: 40px;
+  border: unset;
+}
+
+.login-form-registrado {
+  margin-top: 2rem;
+  font-size: 15px;
+  color: rgb(219, 219, 219);
+}

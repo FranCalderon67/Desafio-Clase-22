@@ -21,6 +21,10 @@ logAuthRouter.post("/login", (req, res) => {
   res.redirect("/home");
 });
 
+logAuthRouter.get("/signin", (req, res) => {
+  res.render(path.join(process.cwd(), "./public/hbsViews/signin.hbs"));
+});
+
 logAuthRouter.get("/logout", (req, res) => {
   const nombre = req.session?.nombre;
   if (nombre) {

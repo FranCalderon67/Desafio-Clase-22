@@ -1,16 +1,16 @@
 const socket = io();
 
+const date = new Date();
+const year = date.getFullYear();
+const month = date.getMonth();
+const day = date.getDate();
+const hour = date.getHours();
+const minute = date.getMinutes();
+const seconds = date.getSeconds();
+
+const today = `[${day}/${month}/${year} ${hour}:${minute}:${seconds}]`;
+
 // MENSAJES
-
-// Definimos un esquema de autor
-const schemaAuthor = new normalizr.schema.Entity("author", {}, { idAttribute: "id" });
-
-// Definimos un esquema de mensaje
-const schemaMensaje = new normalizr.schema.Entity("post", { author: schemaAuthor }, { idAttribute: "_id" });
-
-// Definimos un esquema de posts
-const schemaMensajes = new normalizr.schema.Entity("posts", { mensajes: [schemaMensaje] }, { idAttribute: "id" });
-/* ----------------------------------------------------------------------------- */
 
 const inputUsername = document.getElementById("username");
 const inputMensaje = document.getElementById("text");
@@ -37,38 +37,23 @@ enviarMensaje.addEventListener("submit", (e) => {
   inputMensaje.focus();
 });
 
-function crearEtiquetaMensaje(mensajes) {
-  return mensajes
-    .map((mensaje) => {
-      return `
-        <div>
-             <b style="color:blue;">${mensaje.author.email}</b>
-            <span style="color:brown;">${mensaje.fyh}</span> :
-            <i style="color:green;">${mensaje.text}</i>
-            <img width="50" src="${mensaje.author.avatar}" alt="AVATAR">
-        </div>
-    `;
-    })
-    .join(" ");
+function crearEtiquetaMensaje(mensaje) {
+  const { author, text } = mensaje;
+  return `
+    <div>
+    <span ><img class="avatar" src=${author.avatar} alt="PERFIL"></img></span>
+      <span class="autor">${author.alias} <span class="hora"> ${today}: </span></span>
+      <span class="mensaje">${text}</span>
+    </div>
+  `;
 }
 
-socket.on("messages", (mensajesN) => {
-  const mensajesNormSize = JSON.stringify(mensajesN).length;
-  console.log(mensajesN, mensajesNormSize);
+const agregarMensajes = (mensajes) => {
+  const mensajesFinal = mensajes.map((mensaje) => crearEtiquetaMensaje(mensaje)).join(" ");
+  document.getElementById("messages").innerHTML = mensajesFinal;
+};
 
-  const mensajesD = normalizr.denormalize(mensajesN.result, schemaMensajes, mensajesN.entities);
-  console.log(mensajesD.id);
-  console.log(mensajesD.mensajes);
-  const mensajesDsize = JSON.stringify(mensajesD).length;
-  console.log(mensajesD, mensajesDsize);
-
-  const porcentajeC = parseInt((mensajesNormSize * 100) / mensajesDsize);
-  console.log(`Porcentaje de compresión ${porcentajeC}%`);
-  document.getElementById("compresion-info").innerText = porcentajeC;
-
-  const html = crearEtiquetaMensaje(mensajesD.mensajes);
-  document.getElementById("mensajes").innerHTML = html;
-});
+socket.on("messages", (messages) => agregarMensajes(messages));
 
 inputUsername.addEventListener("input", () => {
   const hayEmail = inputUsername.value.length;

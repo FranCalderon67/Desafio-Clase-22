@@ -14,22 +14,15 @@
     <script src="/socket.io/socket.io.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
+    <link rel="stylesheet" href="../style.css" />
     <title>Stickers</title>
 
   </head>
 
-  <style>
-
-    .product-flex--container { display: flex; flex-direction: row; flex-wrap: wrap; align-content: center; justify-content: space-evenly; margin: 1rem 0 1rem 0; } .card{ margin-top: 1rem;
-    margin-bottom: 1rem; } .form-flex-container{ display: flex; flex-direction: column; } .form-flex-container input { width: 300px; caret-color: red; margin: 0.5rem 0 1rem 1rem; }
-    .form-flex-container label { margin-left: 1rem; } .form-flex-container button{ width: 250px; margin-left: 1rem; background-color: yellowgreen; font-size: 18px; } .chat-container{ margin-left:
-    1rem; } #messages{ margin-left: 1rem; margin-top: 0.5rem; } .autor{ color: blue; font-weight: bold; } .hora{ color: brown; } .mensaje{ color: green; font-style: italic; }
-
-  </style>
-
   <body>
     <h1 id="bienvenido"></h1>
     <button><a id="btnCerrarSesion" href="./logout">LogOut</a></button>
+
     <section>
       <h1>Agregar productos</h1>
       <div>
@@ -54,8 +47,7 @@
     </section>
 
     <section>
-      <h1>Centro de Mensajes Compresión: <span id="compresion-info"></span>%</h1>
-
+      <h1>Centro de Mensajes</h1>
       <input type="email" id="username" placeholder="Ingresá tu email" />
       <input type="text" id="firstname" placeholder="Ingresá tu nombre" />
       <input type="text" id="lastname" placeholder="Ingresá tu apellido" />

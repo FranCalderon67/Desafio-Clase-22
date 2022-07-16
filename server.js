@@ -4,7 +4,7 @@ const app = express();
 const { engine } = require("express-handlebars");
 const session = require("express-session");
 
-//Importes de Mongo
+//Imports de Mongo
 const MongoStore = require("connect-mongo");
 const MongoUri = require("./src/utils/config.js");
 
@@ -17,10 +17,11 @@ const socketServer = new SocketServer(httpServer);
 //Imports de Funcionalidad
 
 const crearProductoRandom = require("./src/utils/productosRandom.js");
-const chatNormalizado = require("./src/websockets/mensajes.js");
-const productosSocket = require("./src/websockets/productos.js");
+const chatSocket = require("./src/websockets/webSocketMensajes.js");
+const productosSocket = require("./src/websockets/webSocketProductos.js");
 const routerAuthWeb = require("./src/web/logAuth.js");
 const routerHomeWeb = require("./src/web/home.js");
+const routerUsuario = require("./src/daos/daoUsuario.js");
 
 //Configuracion de servidor
 app.use(express.json());
@@ -53,7 +54,7 @@ app.use(
 
 app.use(routerHomeWeb);
 app.use(routerAuthWeb);
-
+app.use(routerUsuario);
 //Faker
 app.get("/api/productos-test", (req, res) => {
   const productos = crearProductoRandom();
@@ -61,7 +62,7 @@ app.get("/api/productos-test", (req, res) => {
 });
 //Coneccion de Sockets
 socketServer.on("connection", async (socket) => {
-  chatNormalizado(socket, socketServer.sockets);
+  chatSocket(socket, socketServer.sockets);
   productosSocket(socket, socketServer.sockets);
 });
 

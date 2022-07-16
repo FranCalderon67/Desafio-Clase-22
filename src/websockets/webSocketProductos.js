@@ -1,4 +1,4 @@
-const productos = require("../daos/producto.js");
+const productos = require("../daos/daoProducto.js");
 
 const socketProducto = async (socket, sockets) => {
   socket.emit("products", await productos.obtenerTodos());

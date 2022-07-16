@@ -1,6 +1,6 @@
 const Contenedor = require("../Contenedores/contenedorMongo.js");
 const mongodbUri = require("../utils/config.js");
 
-const productDao = new Contenedor(mongodbUri, "desafio22", "productos");
+const chatDao = new Contenedor(mongodbUri, "proyecto", "chats");
 
-module.exports = productDao;
+module.exports = chatDao;

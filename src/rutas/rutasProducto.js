@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const producto = require("../daos/producto.js");
+const producto = require("../daos/daoProducto.js");
 const routerProducto = Router();
 
 routerProducto.get("/home", async (req, res) => {
