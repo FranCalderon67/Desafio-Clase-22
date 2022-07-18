@@ -53,13 +53,14 @@
 }
 
 .login-background {
-  background: rgb(2, 0, 36);
-  background: linear-gradient(188deg, rgba(2, 0, 36, 1) 0%, rgba(231, 94, 184, 1) 56%, rgba(0, 212, 255, 1) 100%);
+  background-color: rgb(235, 235, 235);
 }
 
 .login-form-background {
+  margin-top: 2rem;
   background-color: white;
   border-radius: 10px;
+  box-shadow: 10px 10px 5px #aaaaaa;
 }
 
 .login-form-flex {
@@ -84,20 +85,24 @@
   margin-bottom: 1rem;
   width: 200px;
   height: 40px;
-  background-color: rgb(219, 219, 219);
   border: unset;
+  outline: none;
+  border-bottom: solid 2px rgb(156, 5, 149);
 }
 
-.btn-login {
+.btn-login,
+.btn-regresar {
   background-color: rgb(156, 5, 149);
   color: white;
-  width: 200px;
+  width: 100px;
   height: 40px;
   border: unset;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .login-form-registrado {
   margin-top: 2rem;
   font-size: 15px;
-  color: rgb(219, 219, 219);
+  color: rgb(156, 156, 156);
 }
