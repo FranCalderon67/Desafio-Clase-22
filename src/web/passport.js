@@ -57,45 +57,90 @@ const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 const usuarios = require("../daos/daoUsuario.js");
 
-passport.use(
-  "login",
-  new LocalStrategy(async (username, password, callback) => {
-    const users = await usuarios.obtenerTodos();
-    const user = users.find((usuario) => usuario.username === username);
-    if (!user || !bcrypt.compareSync(password, user.password)) return callback(null, false, { message: "Usuario no existente o password incorrecto" });
-    callback(null, user);
-  })
-);
+usuarios.conectarMongo();
 
 passport.use(
   "signup",
-  new LocalStrategy(async (username, password, callback) => {
-    const users = await usuarios.obtenerTodos();
-    const user = users.find((usuario) => usuario.username === username);
-    if (user) return callback(null, false, { message: "El usuario ya existe" });
-    const passwordHasheado = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    const usuarioCreado = { username, password: passwordHasheado };
-    console.log(usuarioCreado);
-    await usuarios.agregarItem(usuarioCreado);
-    callback(null, usuarioCreado);
+  new LocalStrategy(
+    {
+      passReqToCallback: true,
+    },
+    async (username, password, cb) => {
+      const user = await usuarios.find("username", username);
+      if (user) {
+        return cb(new Error("Ya existe un usario con ese nombre"), false);
+      } else {
+        const newUser = {
+          username,
+          password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
+        };
+        await usuarios.agregarItem(newUser);
+        return cb(null, newUser);
+      }
+    }
+  )
+);
+
+passport.use(
+  "login",
+  new LocalStrategy({ passReqToCallback: true }, async (username, password, cb) => {
+    const user = await usuarios.find("username", username);
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+      cb(new Error("Datos incorrectos"), false);
+    } else {
+      return cb(null, user);
+    }
   })
 );
 
-/*
-    Candot engo que escribir una sesion, me pasan req.user y elijo
-    que guardar en la sesion, en este caso es el username.
-  */
-passport.serializeUser((usuario, callback) => {
-  callback(null, usuario.username);
+passport.serializeUser((user, done) => {
+  done(null, { id: user.id, username: user.username });
 });
 
-/*
-    Cuando tengo que leer una sesion, agarro lo que esta en la sesion
-    y decido como reconstruir req.user
-  */
-passport.deserializeUser((username, callback) => {
-  const user = users.find((usr) => usr.username == username);
-  callback(null, user);
+passport.deserializeUser(async (usr, done) => {
+  try {
+    const user = await usuarios.find("username", usr.username);
+    return done(null, user);
+  } catch (error) {
+    return done(error, false);
+  }
 });
+
+// passport.use(
+//   "login",
+//   new LocalStrategy(async (username, password, callback) => {
+//     const users = await usuarios.obtenerTodos();
+//     const user = users.find((usuario) => usuario.nombre === username);
+//     if (!user || !bcrypt.compareSync(password, user.password)) return callback(null, false, { message: "Usuario no existente o password incorrecto" });
+//     callback(null, user);
+//   })
+// );
+
+// passport.use(
+//   "signup",
+//   new LocalStrategy(async (username, password, callback) => {
+//     console.log("usuario=>", username, "password=>", password);
+//     const users = await usuarios.obtenerTodos();
+//     const user = users.find((usuario) => usuario.nombre === username);
+//     if (user) return callback(null, false, { message: "El usuario ya existe" });
+//     else if (user === undefined) {
+//       const passwordHasheado = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+//       const usuarioCreado = { username, password: passwordHasheado };
+//       console.log(usuarioCreado);
+//       await usuarios.agregarItem(usuarioCreado);
+//     }
+//     callback(null, username);
+//   })
+// );
+
+// passport.serializeUser((usuario, callback) => {
+//   callback(null, usuario.nombre);
+// });
+
+// passport.deserializeUser(async (username, callback) => {
+//   const users = await usuarios.obtenerTodos();
+//   const user = users.find((usr) => usr.nombre == username);
+//   callback(null, user);
+// });
 
 module.exports = passport;
