@@ -58,10 +58,7 @@ app.use(
 app.use(routerUsuario);
 app.use(routerHomeWeb);
 app.use(routerinfo);
-app.get("/api/randoms", (req, res) => {
-  res.send(forkCalc);
-});
-
+app.use(forkCalc);
 //Faker
 app.get("/api/productos-test", (req, res) => {
   const productos = crearProductoRandom();

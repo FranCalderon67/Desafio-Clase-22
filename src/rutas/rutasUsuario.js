@@ -10,7 +10,7 @@ routerUsuario.use(passport.initialize());
 routerUsuario.use(passport.session());
 
 routerUsuario.get("/", (req, res) => {
-  res.redirect("/home");
+  res.redirect("/login");
 });
 
 routerUsuario.get("/login", (req, res, next) => {
