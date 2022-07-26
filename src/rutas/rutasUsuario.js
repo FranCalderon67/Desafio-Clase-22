@@ -4,7 +4,7 @@ const path = require("path");
 const routerUsuario = Router();
 const passport = require("../web/passport.js");
 
-const { loginErrorHandler, signupErrorHandler } = require("../utils/passportErrors.js");
+// const { loginErrorHandler, signupErrorHandler } = require("../utils/passportErrors.js");
 
 routerUsuario.use(passport.initialize());
 routerUsuario.use(passport.session());
@@ -17,19 +17,19 @@ routerUsuario.get("/login", (req, res, next) => {
   res.render(path.join(process.cwd(), "./public/hbsViews/login.hbs"));
 });
 
-routerUsuario.post("/login", passport.authenticate("login", { failureRedirect: "/login", successRedirect: "/" }), loginErrorHandler);
+routerUsuario.post("/login", passport.authenticate("login", { failureRedirect: "/failedLogin", successRedirect: "/" }));
 
 routerUsuario.get("/signup", (req, res) => {
   res.render(path.join(process.cwd(), "./public/hbsViews/signup.hbs"));
 });
 
-routerUsuario.post("/signup", passport.authenticate("signup", { failureRedirect: "/signup", successRedirect: "/login" }), signupErrorHandler);
+routerUsuario.post("/signup", passport.authenticate("signup", { failureRedirect: "/failedSignup", successRedirect: "/login" }));
 
-routerUsuario.get("/failedLogin", (req, res, next) => {
+routerUsuario.get("/failedLogin", (req, res) => {
   res.render(path.join(process.cwd(), "./public/hbsViews/errorLogin.hbs"));
 });
 
-routerUsuario.get("/failedSignup", (req, res, next) => {
+routerUsuario.get("/failedSignup", (req, res) => {
   res.render(path.join(process.cwd(), "./public/hbsViews/errorSignup.hbs"));
 });
 

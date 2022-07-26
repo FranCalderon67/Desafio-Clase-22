@@ -6,32 +6,49 @@ const usuarios = require("../daos/daoUsuario.js");
 usuarios.conectarMongo();
 
 passport.use(
-  "login",
-  new LocalStrategy({ passReqToCallback: true }, async (username, password, cb) => {
-    const user = await usuarios.find("username", username);
-    if (!user || !bcrypt.compareSync(password, user.password)) {
-      cb(new Error("Datos incorrectos"), false);
-    } else {
-      return cb(null, { nombre: user.nombre, password: user.password });
+  "signup",
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+    },
+    async (email, password, callback) => {
+      try {
+        const userExists = await usuarios.obtenerUsuario(email);
+        if (userExists) {
+          return callback(null, false);
+        } else {
+          const passwordHasheado = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+          const usuarioCreado = usuarios.agregarItem({ email, password: passwordHasheado });
+          return callback(null, usuarioCreado);
+        }
+      } catch (error) {
+        console.log("error=>", error);
+      }
     }
-  })
+  )
 );
 
 passport.use(
-  "signup",
-  new LocalStrategy(async (username, password, callback) => {
-    console.log("usuario=>", username, "password=>", password);
-    const users = await usuarios.obtenerTodos();
-    const user = users.find((usuario) => usuario.nombre === username);
-    if (user) return callback(null, false, { message: "El usuario ya existe" });
-    else if (user === undefined) {
-      const passwordHasheado = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-      const usuarioCreado = { username, password: passwordHasheado };
-      console.log(usuarioCreado);
-      await usuarios.agregarItem(usuarioCreado);
-      callback(null, { nombre: usuarioCreado.nombre, password: usuarioCreado.password });
+  "login",
+  new LocalStrategy(
+    { usernameField: "email", passwordField: "password" },
+
+    async (email, password, callback) => {
+      try {
+        const user = await usuarios.obtenerUsuario(email);
+        console.log(user);
+        if (!user || !bcrypt.compareSync(password, user.password)) {
+          return callback(null, false);
+        } else {
+          return callback(null, user);
+        }
+      } catch (error) {
+        console.log("ERROR=>", error);
+        return callback(null, false);
+      }
     }
-  })
+  )
 );
 
 passport.serializeUser((user, done) => {
@@ -40,7 +57,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (usr, done) => {
   try {
-    const user = await usuarios.find("username", usr.username);
+    const user = await usuarios.obtenerUsuario("username", usr.username);
     return done(null, user);
   } catch (error) {
     return done(error, false);

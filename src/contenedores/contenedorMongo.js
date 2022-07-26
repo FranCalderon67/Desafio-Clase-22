@@ -52,6 +52,15 @@ class ContenedorMongoDB {
       throw error;
     }
   }
+
+  async obtenerUsuario(email) {
+    try {
+      const data = await this.mongo.db(this.db).collection(this.collection).findOne({ email: email });
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = ContenedorMongoDB;

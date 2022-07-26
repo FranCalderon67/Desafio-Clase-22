@@ -21,8 +21,12 @@ const chatSocket = require("./src/websockets/webSocketMensajes.js");
 const productosSocket = require("./src/websockets/webSocketProductos.js");
 const routerUsuario = require("./src/rutas/rutasUsuario.js");
 const routerHomeWeb = require("./src/web/home.js");
+const routerinfo = require("./src/rutas/rutasInfo.js");
+const yargs = require("yargs");
+const argumentos = process.argv.slice(2);
 
-//Configuracion de servidor
+const forkCalc = require("./src/rutas/rutaCalculoFork.js");
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -53,8 +57,11 @@ app.use(
 //Rutas
 app.use(routerUsuario);
 app.use(routerHomeWeb);
+app.use(routerinfo);
+app.get("/api/randoms", (req, res) => {
+  res.send(forkCalc);
+});
 
-// app.use(routerUsuario);
 //Faker
 app.get("/api/productos-test", (req, res) => {
   const productos = crearProductoRandom();
@@ -66,6 +73,15 @@ socketServer.on("connection", async (socket) => {
   productosSocket(socket, socketServer.sockets);
 });
 
-httpServer.listen(8080, () => {
-  console.log("Servidor escuchando en puerto 8080");
-});
+httpServer.listen(
+  yargs(argumentos)
+    .default({
+      port: 8080,
+    })
+    .alias({
+      p: "port",
+    }).argv,
+  () => {
+    console.log("Servidor escuchando en puerto 8080");
+  }
+);

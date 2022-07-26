@@ -1,3 +1,4 @@
-const mongodbUri = "mongodb+srv://francisco:francisco123@cluster0.hohi5.mongodb.net/?retryWrites=true&w=majority";
+require("dotenv").config();
 
+const mongodbUri = process.env.MONGOURI;
 module.exports = mongodbUri;
