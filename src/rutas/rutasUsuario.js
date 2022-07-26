@@ -17,7 +17,7 @@ routerUsuario.get("/login", (req, res, next) => {
   res.render(path.join(process.cwd(), "./public/hbsViews/login.hbs"));
 });
 
-routerUsuario.post("/login", passport.authenticate("login", { failureRedirect: "/failedLogin", successRedirect: "/" }));
+routerUsuario.post("/login", passport.authenticate("login", { failureRedirect: "/failedLogin", successRedirect: "/home" }));
 
 routerUsuario.get("/signup", (req, res) => {
   res.render(path.join(process.cwd(), "./public/hbsViews/signup.hbs"));

@@ -7,7 +7,7 @@ const day = date.getDate();
 const hour = date.getHours();
 const minute = date.getMinutes();
 const seconds = date.getSeconds();
-const { calcRandom } = require("../src/utils/calcFork.js");
+// const { calcRandom } = require("../src/utils/calcFork.js");
 
 const today = `[${day}/${month}/${year} ${hour}:${minute}:${seconds}]`;
 
@@ -127,8 +127,8 @@ btnCerrar.addEventListener("click", async () => {
   }, 2000);
 });
 
-process.on("random", (msg) => {
-  const cantidad = parseInt(msg);
-  const numeros = calcRandom(cantidad);
-  process.send(numeros);
-});
+// process.on("random", (msg) => {
+//   const cantidad = parseInt(msg);
+//   const numeros = calcRandom(cantidad);
+//   process.send(numeros);
+// });

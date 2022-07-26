@@ -15,6 +15,7 @@ passport.use(
     async (email, password, callback) => {
       try {
         const userExists = await usuarios.obtenerUsuario(email);
+        console.log("TEST signup");
         if (userExists) {
           return callback(null, false);
         } else {
