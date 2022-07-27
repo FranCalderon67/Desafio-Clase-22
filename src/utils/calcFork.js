@@ -13,4 +13,10 @@ const calcRandom = (q) => {
   return numeros;
 };
 
+process.on("message", (msg) => {
+  const cantidad = parseInt(msg);
+  const numeros = calcRandom(cantidad);
+  process.send(numeros);
+});
+
 module.exports = { calcRandom };

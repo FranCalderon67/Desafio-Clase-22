@@ -1,6 +1,3 @@
-// const passport = require("passport");
-// const LocalStrategy = require("passport-local");
-
 const autorizacionWeb = (req, res, next) => {
   if (req.session?.nombre) {
     next();

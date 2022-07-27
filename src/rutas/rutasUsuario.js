@@ -34,7 +34,7 @@ routerUsuario.get("/failedSignup", (req, res) => {
 });
 
 routerUsuario.get("/logout", (req, res) => {
-  const nombre = req.session?.nombre;
+  const nombre = req.session?.email;
   if (nombre) {
     req.session.destroy((err) => {
       if (!err) {
@@ -49,7 +49,8 @@ routerUsuario.get("/logout", (req, res) => {
 });
 
 routerUsuario.get("/user", (req, res) => {
-  if (req.session?.nombre) res.send(req.session.nombre);
+  console.log(req.session);
+  if (req.session?.email) res.send(req.session.email);
   else res.send("invitado");
 });
 
